@@ -51,5 +51,5 @@
 (add-to-list 'load-path "~/.emacs.d/mod/themes")
 (load "_ef.el")
 
-(add-to-list 'load-path "~/.emacs.d/mod")
-(load "_profile.el")
+(add-to-list 'load-path "~/.emacs.d/setting")
+(load "profile.el")

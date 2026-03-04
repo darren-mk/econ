@@ -102,5 +102,5 @@ projects
 tree-sitter
 .aider*
 
-# profile
-mod/_profile.el
+# setting
+setting/
