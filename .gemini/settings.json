@@ -1,0 +1,6 @@
+{
+  "ui": {
+    "useAlternateBuffer": true,
+    "incrementalRendering": true
+  }
+}
