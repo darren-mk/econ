@@ -10,6 +10,11 @@
 ;; brew install --cask dotnet-sdk
 ;; dotnet tool install -g fantomas
 
+;; Suppress byte-compiler warnings for variables defined in other packages
+(defvar eglot-server-programs)
+(defvar fsharp-interactive-command)
+(defvar savehist-additional-variables)
+
 (add-to-list
  'exec-path
  (expand-file-name "~/.dotnet/tools"))
@@ -35,9 +40,9 @@
 (use-package fsharp-mode
   :ensure t
   :mode (("\\.fs[iylx]?\\'" . fsharp-mode))
-  :init (setq fsharp-interactive-command "dotnet fsi")
   :hook ((fsharp-mode . set-indentation)
          (fsharp-mode . eglot-ensure))
+  :config (setq fsharp-interactive-command "dotnet fsi")
   :bind (:map fsharp-mode-map ("C-c f" . insert-fact-attr)))
 
 (use-package eglot-fsharp
@@ -48,39 +53,50 @@
   ;; (setenv "PATH" (concat (expand-file-name "~/.dotnet/tools:") (getenv "PATH")))
   ;; (add-to-list 'exec-path (expand-file-name "~/.dotnet/tools"))
   :config
-  (add-hook 'fsharp-mode-hook #'eglot-ensure)
-  ;; Optional: tailor FSAC behavior
+  (setq eglot-ignored-server-capabilities '(:inlayHintProvider))
+  ;; Analyzers and Linter add significant overhead — disable until needed
   (setq eglot-workspace-configuration
         '(:FSharp
-          (:AutomaticWorkspaceInit
-           t
-           :EnableAnalyzers true
+          (:AutomaticWorkspaceInit t
+           :EnableAnalyzers false
            :KeywordsAutocomplete true
-           :Linter (:Enabled true)))))
+           :Linter (:Enabled false)))))
 
 (defun dk/fantomas-format-buffer ()
+  "Format current buffer with fantomas asynchronously.
+Runs fantomas on a temp file to respect fantomas-config.json in project root."
   (interactive)
-  (call-process-region
-   (point-min) (point-max)
-   "fantomas"
-   t t nil "--stdin"))
+  (let* ((buf (current-buffer))
+         (fname (buffer-file-name))
+         (tmp (make-temp-file "fantomas-" nil (and fname (file-name-extension fname t))))
+         (tick (buffer-modified-tick buf)))
+    (write-region (point-min) (point-max) tmp nil 'silent)
+    (make-process
+     :name "fantomas"
+     :command (list "fantomas" tmp)
+     :noquery t
+     :sentinel
+     (lambda (proc _event)
+       (when (eq (process-status proc) 'exit)
+         (if (zerop (process-exit-status proc))
+             (when (buffer-live-p buf)
+               (with-current-buffer buf
+                 (when (= tick (buffer-modified-tick buf))
+                   (let ((pos (point)))
+                     (replace-buffer-contents
+                      (find-file-noselect tmp t))
+                     (goto-char pos)))))
+           (message "fantomas: formatting failed (exit %d)" (process-exit-status proc)))
+         (ignore-errors (delete-file tmp)))))))
 
-(add-hook 'fsharp-mode-hook
-          (lambda ()
-            (add-hook 'before-save-hook
-                      #'dk/fantomas-format-buffer
-                      nil t)))
 
 (use-package corfu
   :ensure t
-  :init
-  (global-corfu-mode)
+  :init (global-corfu-mode)
   :config
   ;; Sensible sizes; keep list tall enough without going wild
   (setq corfu-min-width 25
         corfu-max-width 100
-        corfu-min-height 6
-        corfu-max-height 20
         corfu-count 20
         corfu-auto t
         corfu-cycle t
@@ -89,11 +105,8 @@
         corfu-scroll-margin 4
         tab-always-indent 'complete)
   (corfu-popupinfo-mode 1)
-  ;; Show docs after a short delay (auto . manual)
-  (setq corfu-popupinfo-delay '(0.6 . 0.1))
-  ;; Persist completion history
+  (corfu-history-mode 1)
   (with-eval-after-load 'savehist
-    (corfu-history-mode 1)
     (add-to-list 'savehist-additional-variables 'corfu-history)))
 
 (use-package nerd-icons
