@@ -58,9 +58,9 @@
   (setq eglot-workspace-configuration
         '(:FSharp
           (:AutomaticWorkspaceInit t
-           :EnableAnalyzers false
+           :EnableAnalyzers :json-false
            :KeywordsAutocomplete true
-           :Linter (:Enabled false)))))
+           :Linter (:Enabled :json-false)))))
 
 (defun dk/fantomas-format-buffer ()
   "Format current buffer with fantomas asynchronously.
@@ -89,12 +89,10 @@ Runs fantomas on a temp file to respect fantomas-config.json in project root."
            (message "fantomas: formatting failed (exit %d)" (process-exit-status proc)))
          (ignore-errors (delete-file tmp)))))))
 
-
 (use-package corfu
   :ensure t
   :init (global-corfu-mode)
   :config
-  ;; Sensible sizes; keep list tall enough without going wild
   (setq corfu-min-width 25
         corfu-max-width 100
         corfu-count 20
