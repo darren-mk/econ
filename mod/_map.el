@@ -37,6 +37,7 @@
 
 (add-to-list 'load-path "~/.emacs.d/mod/shells")
 (load "_eat.el")
+(load "_claude.el")
 
 (add-to-list 'load-path "~/.emacs.d/mod/languages")
 (load "_el.el")
