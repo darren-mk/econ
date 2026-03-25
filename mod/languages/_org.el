@@ -2,7 +2,6 @@
 
 (use-package org
   :hook ((org-mode . visual-line-mode)
-         (org-mode . variable-pitch-mode)
          (org-mode . my/org-mode-setup))
   :config
   (defun my/org-mode-setup ()
