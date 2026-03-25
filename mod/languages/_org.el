@@ -1,11 +1,5 @@
 ;;; -*- lexical-binding: t; -*-
 
-(set-face-attribute
- 'variable-pitch nil
- :family "Iosevka Aile"
- :height 140
- :weight 'regular)
-
 (use-package org
   :hook ((org-mode . visual-line-mode)
          (org-mode . variable-pitch-mode)
