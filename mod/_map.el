@@ -11,6 +11,7 @@
 (load "_scroll.el")
 (load "_projectile.el")
 (load "_treemacs.el")
+(load "_buffers.el")
 
 (add-to-list 'load-path "~/.emacs.d/mod/editing")
 (load "_path.el")
