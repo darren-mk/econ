@@ -9,7 +9,6 @@
 (add-to-list 'load-path "~/.emacs.d/mod/navigation")
 (load "_ido.el")
 (load "_scroll.el")
-(load "_dired.el")
 (load "_projectile.el")
 (load "_treemacs.el")
 
