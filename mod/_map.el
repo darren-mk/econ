@@ -48,6 +48,7 @@
 (load "_dockerfile.el")
 (load "_sql.el")
 (load "_md.el")
+(load "_csv.el")
 
 (add-to-list 'load-path "~/.emacs.d/mod/themes")
 (load "_ef.el")
