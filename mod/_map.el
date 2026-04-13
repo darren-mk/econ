@@ -15,17 +15,14 @@
 (load "_buffers.el")
 
 (add-to-list 'load-path "~/.emacs.d/mod/editing")
-(load "_path.el")
+(load "_path.el")'
 (load "_magit.el")
-(load "_flycheck.el")
 (load "_backup.el")
 (load "_yesno.el")
 (load "_paredit.el")
-(load "_autocomplete.el")
-(load "_lsp.el")
 (load "_eglot.el")
-(load "_company.el")
 (load "_yasnippet.el")
+(load "_corfu.el")
 (load "_indent.el")
 
 (add-to-list 'load-path "~/.emacs.d/mod/visual")

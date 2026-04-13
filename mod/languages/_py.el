@@ -1,11 +1,16 @@
 ;;; -*- lexical-binding: t; -*-
 
-(use-package lsp-pyright
-  :ensure t
-  :custom (lsp-pyright-langserver-command "pyright")
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp))))
+;; brew install pyright
+
+(defvar eglot-server-programs)
+
+(use-package python
+  :hook ((python-mode . eglot-ensure)
+         (python-mode . corfu-mode))
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '(python-mode . ("pyright-langserver" "--stdio")))))
 
 (use-package pytest
   :ensure t

@@ -1,8 +1,5 @@
 ;;; -*- lexical-binding: t; -*-
 
-;; fedora:
-;; $ sudo dnf install rustc cargo clippy
-
 ;; mac:
 ;; $ brew install rustup
 ;; $ rustup-init
@@ -10,7 +7,8 @@
 
 (use-package rustic
   :ensure t
-  :config
-  (setq rustic-format-on-save nil)
+  :hook (rustic-mode . corfu-mode)
   :custom
+  (rustic-lsp-client 'eglot)
+  (rustic-format-on-save nil)
   (rustic-cargo-use-last-stored-arguments t))

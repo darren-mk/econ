@@ -13,7 +13,6 @@
 ;; Suppress byte-compiler warnings for variables defined in other packages
 (defvar eglot-server-programs)
 (defvar fsharp-interactive-command)
-(defvar savehist-additional-variables)
 
 (add-to-list
  'exec-path
@@ -88,24 +87,6 @@ Runs fantomas on a temp file to respect fantomas-config.json in project root."
                      (goto-char pos)))))
            (message "fantomas: formatting failed (exit %d)" (process-exit-status proc)))
          (ignore-errors (delete-file tmp)))))))
-
-(use-package corfu
-  :ensure t
-  :init (global-corfu-mode)
-  :config
-  (setq corfu-min-width 25
-        corfu-max-width 100
-        corfu-count 20
-        corfu-auto t
-        corfu-cycle t
-        corfu-separator ?\s
-        corfu-preview-current t
-        corfu-scroll-margin 4
-        tab-always-indent 'complete)
-  (corfu-popupinfo-mode 1)
-  (corfu-history-mode 1)
-  (with-eval-after-load 'savehist
-    (add-to-list 'savehist-additional-variables 'corfu-history)))
 
 (use-package nerd-icons
   :ensure t)
