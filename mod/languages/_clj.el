@@ -5,6 +5,14 @@
 ;; brew install clojure-lsp
 
 (defvar eglot-server-programs)
+
+(defun my-project-find-clj-root (dir)
+  (when-let ((root (or (locate-dominating-file dir "deps.edn")
+                       (locate-dominating-file dir "project.clj"))))
+    (cons 'transient root)))
+
+(add-to-list 'project-find-functions #'my-project-find-clj-root)
+
 (declare-function eglot-format-buffer "eglot")
 
 (use-package clojure-mode
