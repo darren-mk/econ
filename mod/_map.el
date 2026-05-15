@@ -38,6 +38,7 @@
 (add-to-list 'load-path "~/.emacs.d/mod/languages")
 (load "_el.el")
 (load "_org.el")
+(load "_ts.el")
 (load "_web.el")
 (load "_rest.el")
 (load "_yaml.el")
